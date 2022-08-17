@@ -8,40 +8,55 @@ const availableZipItems = [
     { place: 'Chiangmai', code: '50000' },
     { place: 'Khonkaen', code: '40000' },
     { place: 'Chonburi', code: '20000' },
-   ]
-   
-   const ZipItem = ({ place, code, navigation }) => (
+    { place: 'krabi' , code: '81000'}
+]
+
+const ZipItem = ({ place, code, navigation }) => (
     <TouchableHighlight onPress={() => {
         navigation.navigate('Weather', { zipCode: code })
-    }} >
-        <View style={styles.zipItem}> 
-            <Text> {place}</Text>
-            <Text> {code}</Text>
+    }} style={zipStyles.rowItm}>
+        <View style={zipStyles.zipItm}>
+            <Text style={zipStyles.txt}>{place}</Text>
+            <Text style={zipStyles.txt}>{code}</Text>
         </View>
     </TouchableHighlight>
 )
 
-export default function ZipCodeScreen(){
+const _keyExtractor = item => item.code
+
+export default function ZipCodeScreen() {
     const navigation = useNavigation()
-    return(
-        <FlatList
-            data = {availableZipItems}
-            keyExtractor = {item => item.code}
-            renderItem = {({item}) => <ZipItem{...item} navigation={navigation}/>}
-        />
-    )
+    return (
+        <View>
+            <FlatList style={zipStyles.flatLst}
+                data={availableZipItems}
+                keyExtractor={_keyExtractor}
+                renderItem={({ item }) =>
+                    <ZipItem {...item} navigation={navigation} />
+                }
+            />
+            <StatusBar style="auto" />
+        </View>
+    );
 }
 
-const styles = StyleSheet.create({
-    zipItem: {
-        flex: 1,
+const zipStyles = StyleSheet.create({
+    flatLst: {
+        backgroundColor: 'rgba(255, 255, 255,1)',
+        height: '100%',
+        width: '100%',
+        flexDirection: 'column'
+    },
+    rowItm: {
+        marginBottom: 5,
+        backgroundColor: 'rgb(225, 225,225)'
+    },
+    zipItm: {
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        margin: 10
     },
-    zipPlace: {
-        flex: 1,
-    },
-    zipCode: {
-        flex: 1,
+    txt: {
+        fontSize: 24,
     }
-})
+});
